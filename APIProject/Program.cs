@@ -9,7 +9,7 @@ namespace APIProject
         {
             var builder = WebApplication.CreateBuilder(args);
             string conntectionString = builder.Configuration.GetConnectionString("ApplicationContext");
-            builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(conntectionString));
+            builder.Services.AddDbContext<ApplicationContext>(opt => opt.UseSqlServer(conntectionString));
 
             var app = builder.Build();
 
