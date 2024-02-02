@@ -1,4 +1,5 @@
 using APIProject.Data;
+using APIProject.Handlers;
 using Microsoft.EntityFrameworkCore;
 
 namespace APIProject
@@ -14,6 +15,9 @@ namespace APIProject
             var app = builder.Build();
 
             app.MapGet("/", () => "Hello World!");
+
+            app.MapGet("/people/{search?}", PersonHandler.ListPeople);
+            app.MapPost("/people", PersonHandler.AddPeople);
 
             app.Run();
         }

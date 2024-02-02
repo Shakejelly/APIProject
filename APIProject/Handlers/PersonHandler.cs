@@ -1,49 +1,53 @@
 ﻿using APIProject.Data;
 using APIProject.Models;
+using APIProject.Models.Dto;
 using APIProject.Models.ViewModels;
+using APIProject.Repository;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace APIProject.Handlers
 {
     public class PersonHandler
     {
-        public static IResult ListPeople(ApplicationContext context)
+        public static IResult ListPeople(IPersonHelper personHelper)
         {
-            PersonViewModel[] result = context.Persons
-                 .Select(p => new PersonViewModel()
-                 {
-                     FirstName = p.FirstName,
-                     LastName = p.LastName,
-                     Age = p.Age,
-                 }).ToArray();
-            return Results.Json(result);
+            try
+            {
+                return Results.Json(personHelper.ListPeople);
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }            
+            
+   
+            
         }
 
-        public static IResult ViewPeople(ApplicationContext context, int id)
+        public static IResult ViewPeople(int id, IPersonHelper personHelper)
         {
-            Person entity = context.Persons
-                .Where(p => p.PersonId == id)
-                .Include(p => p.Interests)
-                .SingleOrDefault();
-
-            if (entity == null)
+            try
             {
-                return Results.NotFound();
+              return Results.Json(personHelper.ViewPeople(id));
             }
-            PersonViewModel result = new PersonViewModel()
+              catch (Exception ex) 
             {
-                FirstName = entity.FirstName,
-                LastName = entity.LastName,
-                Age = entity.Age,
-                Interests = entity.Interests.Select(i => new InterestViewModel()
-                {
-                    Titel = i.Titel,
-                    Description = i.Description,
-                })
-                .ToArray()
-
-            };
-            return Results.Json(result);
+              return Results.Problem(ex.Message);
+            }
+            
+        }
+        public static IResult AddPeople(PersonDto personDto, IPersonHelper personHelper)
+        {
+            try
+            {
+                personHelper.AddPerson(personDto);
+                return Results.StatusCode((int)HttpStatusCode.Created);
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.Message);
+            }
         }
 
     }
