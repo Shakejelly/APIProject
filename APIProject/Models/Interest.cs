@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using APIProject.Models;
 
 namespace APIProject.Models
 {
@@ -12,7 +13,8 @@ namespace APIProject.Models
      
 
 
-        public virtual Person Persons { get; set; }
+        public virtual ICollection<Person> Persons { get; set; }
+        public virtual ICollection<Link> Links { get; set; }
 
     }
 }

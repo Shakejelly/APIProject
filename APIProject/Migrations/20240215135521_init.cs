@@ -4,7 +4,7 @@
 
 namespace APIProject.Migrations
 {
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -30,6 +30,7 @@ namespace APIProject.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<int>(type: "int", nullable: false),
                     Age = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -61,9 +62,46 @@ namespace APIProject.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Link",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    WebLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PersonsPersonId = table.Column<int>(type: "int", nullable: false),
+                    InterestId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Link", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Link_Interests_InterestId",
+                        column: x => x.InterestId,
+                        principalTable: "Interests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Link_Persons_PersonsPersonId",
+                        column: x => x.PersonsPersonId,
+                        principalTable: "Persons",
+                        principalColumn: "PersonId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_InterestPerson_PersonsPersonId",
                 table: "InterestPerson",
+                column: "PersonsPersonId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Link_InterestId",
+                table: "Link",
+                column: "InterestId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Link_PersonsPersonId",
+                table: "Link",
                 column: "PersonsPersonId");
         }
 
@@ -71,6 +109,9 @@ namespace APIProject.Migrations
         {
             migrationBuilder.DropTable(
                 name: "InterestPerson");
+
+            migrationBuilder.DropTable(
+                name: "Link");
 
             migrationBuilder.DropTable(
                 name: "Interests");

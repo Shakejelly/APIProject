@@ -6,7 +6,7 @@ namespace APIProject.Repository
 {
     public interface IInterestHelper
     {
-        public void AddInterest(InterestDto interestDto);
+        public void AddInterest(ApplicationContext context, InterestDto interestDto);
 
     }
     public class InterestHelper : IInterestHelper
@@ -17,7 +17,7 @@ namespace APIProject.Repository
             _context = context;
         }
 
-        public void AddInterest(InterestDto interestDto)
+        public void AddInterest(ApplicationContext context, InterestDto interestDto)
         {
             Interest interest = new Interest()
             {

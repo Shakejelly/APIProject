@@ -18,6 +18,7 @@ namespace APIProject
 
             app.MapGet("/people/{search?}", PersonHandler.ListPeople);
             app.MapPost("/people", PersonHandler.AddPeople);
+            app.MapPost("/interests", InterestHandler.AddInterest);
 
             app.Run();
         }

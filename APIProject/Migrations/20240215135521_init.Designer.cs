@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APIProject.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240122132007_Init")]
-    partial class Init
+    [Migration("20240215135521_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,7 +23,7 @@ namespace APIProject.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("APIProject.Models.ViewModels.Interest", b =>
+            modelBuilder.Entity("APIProject.Models.Interest", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -44,7 +44,33 @@ namespace APIProject.Migrations
                     b.ToTable("Interests");
                 });
 
-            modelBuilder.Entity("APIProject.Models.ViewModels.Person", b =>
+            modelBuilder.Entity("APIProject.Models.Link", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("InterestId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PersonsPersonId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WebLink")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InterestId");
+
+                    b.HasIndex("PersonsPersonId");
+
+                    b.ToTable("Link");
+                });
+
+            modelBuilder.Entity("APIProject.Models.Person", b =>
                 {
                     b.Property<int>("PersonId")
                         .ValueGeneratedOnAdd()
@@ -62,6 +88,9 @@ namespace APIProject.Migrations
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PhoneNumber")
+                        .HasColumnType("int");
 
                     b.HasKey("PersonId");
 
@@ -83,19 +112,48 @@ namespace APIProject.Migrations
                     b.ToTable("InterestPerson");
                 });
 
+            modelBuilder.Entity("APIProject.Models.Link", b =>
+                {
+                    b.HasOne("APIProject.Models.Interest", "Interest")
+                        .WithMany("Links")
+                        .HasForeignKey("InterestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("APIProject.Models.Person", "Persons")
+                        .WithMany("Links")
+                        .HasForeignKey("PersonsPersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Interest");
+
+                    b.Navigation("Persons");
+                });
+
             modelBuilder.Entity("InterestPerson", b =>
                 {
-                    b.HasOne("APIProject.Models.ViewModels.Interest", null)
+                    b.HasOne("APIProject.Models.Interest", null)
                         .WithMany()
                         .HasForeignKey("InterestsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("APIProject.Models.ViewModels.Person", null)
+                    b.HasOne("APIProject.Models.Person", null)
                         .WithMany()
                         .HasForeignKey("PersonsPersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("APIProject.Models.Interest", b =>
+                {
+                    b.Navigation("Links");
+                });
+
+            modelBuilder.Entity("APIProject.Models.Person", b =>
+                {
+                    b.Navigation("Links");
                 });
 #pragma warning restore 612, 618
         }
