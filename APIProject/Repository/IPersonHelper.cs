@@ -8,7 +8,7 @@ namespace APIProject.Repository
 {
     public interface IPersonHelper
     {
-        public PersonViewModel[] ListPeople();
+        public List<PersonViewModel> ListPeople();
         public PersonViewModel ViewPeople(int id);
         public void AddPerson(PersonDto personDto);
     }
@@ -32,15 +32,17 @@ namespace APIProject.Repository
             _context.SaveChanges();
         }
 
-        public PersonViewModel[] ListPeople()
+        public List<PersonViewModel> ListPeople()
         {
-            PersonViewModel[] result = _context.Persons
-         .Select(p => new PersonViewModel()
-         {
-             FirstName = p.FirstName,
-             LastName = p.LastName,
-             Age = p.Age,
-         }).ToArray();
+            var result = _context.Persons
+             .Select(p => new PersonViewModel()
+             {
+                 FirstName = p.FirstName,
+                 LastName = p.LastName,
+                 Age = p.Age,
+                 PhoneNumber = p.PhoneNumber
+             }).ToList();
+
             return result;
         }
 

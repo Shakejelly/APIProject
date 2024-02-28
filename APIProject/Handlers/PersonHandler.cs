@@ -14,7 +14,7 @@ namespace APIProject.Handlers
         {
             try
             {
-                return Results.Json(personHelper.ListPeople);
+                return Results.Json(personHelper.ListPeople());
             }
             catch (Exception ex)
             {
