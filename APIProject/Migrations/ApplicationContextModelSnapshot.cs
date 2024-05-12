@@ -23,11 +23,11 @@ namespace APIProject.Migrations
 
             modelBuilder.Entity("APIProject.Models.Interest", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("InterestId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InterestId"), 1L, 1);
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -37,35 +37,9 @@ namespace APIProject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("InterestId");
 
                     b.ToTable("Interests");
-                });
-
-            modelBuilder.Entity("APIProject.Models.Link", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("InterestId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PersonsPersonId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("WebLink")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InterestId");
-
-                    b.HasIndex("PersonsPersonId");
-
-                    b.ToTable("Link");
                 });
 
             modelBuilder.Entity("APIProject.Models.Person", b =>
@@ -95,63 +69,62 @@ namespace APIProject.Migrations
                     b.ToTable("Persons");
                 });
 
-            modelBuilder.Entity("InterestPerson", b =>
+            modelBuilder.Entity("APIProject.Models.PersonInterest", b =>
                 {
-                    b.Property<int>("InterestsId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("PersonsPersonId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("InterestsInterestId")
                         .HasColumnType("int");
 
-                    b.HasKey("InterestsId", "PersonsPersonId");
+                    b.Property<int>("InterstId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("PersonsPersonId");
+                    b.Property<string>("Link")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("InterestPerson");
+                    b.Property<int>("PersonId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InterestsInterestId");
+
+                    b.HasIndex("PersonId");
+
+                    b.ToTable("PersonInterests");
                 });
 
-            modelBuilder.Entity("APIProject.Models.Link", b =>
+            modelBuilder.Entity("APIProject.Models.PersonInterest", b =>
                 {
-                    b.HasOne("APIProject.Models.Interest", "Interest")
-                        .WithMany("Links")
-                        .HasForeignKey("InterestId")
+                    b.HasOne("APIProject.Models.Interest", "Interests")
+                        .WithMany("PersonInterests")
+                        .HasForeignKey("InterestsInterestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("APIProject.Models.Person", "Persons")
-                        .WithMany("Links")
-                        .HasForeignKey("PersonsPersonId")
+                        .WithMany("PersonInterests")
+                        .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Interest");
+                    b.Navigation("Interests");
 
                     b.Navigation("Persons");
                 });
 
-            modelBuilder.Entity("InterestPerson", b =>
-                {
-                    b.HasOne("APIProject.Models.Interest", null)
-                        .WithMany()
-                        .HasForeignKey("InterestsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("APIProject.Models.Person", null)
-                        .WithMany()
-                        .HasForeignKey("PersonsPersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("APIProject.Models.Interest", b =>
                 {
-                    b.Navigation("Links");
+                    b.Navigation("PersonInterests");
                 });
 
             modelBuilder.Entity("APIProject.Models.Person", b =>
                 {
-                    b.Navigation("Links");
+                    b.Navigation("PersonInterests");
                 });
 #pragma warning restore 612, 618
         }

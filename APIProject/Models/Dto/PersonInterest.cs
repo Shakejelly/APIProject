@@ -1,6 +1,6 @@
 ﻿namespace APIProject.Models.Dto
 {
-    public class LinkDto
+    public class PersonInterest
     {
         public string WebLink { get; set; }
     }

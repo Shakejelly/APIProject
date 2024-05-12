@@ -19,23 +19,23 @@ namespace APIProject.Handlers
             catch (Exception ex)
             {
                 return Results.Problem(ex.Message);
-            }            
-            
-   
-            
+            }
+
+
+
         }
 
         public static IResult ViewPeople(int id, IPersonHelper personHelper)
         {
             try
             {
-              return Results.Json(personHelper.ViewPeople(id));
+                return Results.Json(personHelper.ViewPeople(id));
             }
-              catch (Exception ex) 
+            catch (Exception ex)
             {
-              return Results.Problem(ex.Message);
+                return Results.Problem(ex.Message);
             }
-            
+
         }
         public static IResult AddPeople(PersonDto personDto, IPersonHelper personHelper)
         {

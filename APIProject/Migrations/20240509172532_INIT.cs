@@ -4,7 +4,7 @@
 
 namespace APIProject.Migrations
 {
-    public partial class init : Migration
+    public partial class INIT : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,14 +12,14 @@ namespace APIProject.Migrations
                 name: "Interests",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    InterestId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Titel = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Interests", x => x.Id);
+                    table.PrimaryKey("PK_Interests", x => x.InterestId);
                 });
 
             migrationBuilder.CreateTable(
@@ -39,79 +39,48 @@ namespace APIProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "InterestPerson",
-                columns: table => new
-                {
-                    InterestsId = table.Column<int>(type: "int", nullable: false),
-                    PersonsPersonId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_InterestPerson", x => new { x.InterestsId, x.PersonsPersonId });
-                    table.ForeignKey(
-                        name: "FK_InterestPerson_Interests_InterestsId",
-                        column: x => x.InterestsId,
-                        principalTable: "Interests",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_InterestPerson_Persons_PersonsPersonId",
-                        column: x => x.PersonsPersonId,
-                        principalTable: "Persons",
-                        principalColumn: "PersonId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Link",
+                name: "PersonInterests",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    WebLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PersonsPersonId = table.Column<int>(type: "int", nullable: false),
-                    InterestId = table.Column<int>(type: "int", nullable: false)
+                    Link = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PersonId = table.Column<int>(type: "int", nullable: false),
+                    InterstId = table.Column<int>(type: "int", nullable: false),
+                    InterestsInterestId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Link", x => x.Id);
+                    table.PrimaryKey("PK_PersonInterests", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Link_Interests_InterestId",
-                        column: x => x.InterestId,
+                        name: "FK_PersonInterests_Interests_InterestsInterestId",
+                        column: x => x.InterestsInterestId,
                         principalTable: "Interests",
-                        principalColumn: "Id",
+                        principalColumn: "InterestId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Link_Persons_PersonsPersonId",
-                        column: x => x.PersonsPersonId,
+                        name: "FK_PersonInterests_Persons_PersonId",
+                        column: x => x.PersonId,
                         principalTable: "Persons",
                         principalColumn: "PersonId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_InterestPerson_PersonsPersonId",
-                table: "InterestPerson",
-                column: "PersonsPersonId");
+                name: "IX_PersonInterests_InterestsInterestId",
+                table: "PersonInterests",
+                column: "InterestsInterestId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Link_InterestId",
-                table: "Link",
-                column: "InterestId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Link_PersonsPersonId",
-                table: "Link",
-                column: "PersonsPersonId");
+                name: "IX_PersonInterests_PersonId",
+                table: "PersonInterests",
+                column: "PersonId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "InterestPerson");
-
-            migrationBuilder.DropTable(
-                name: "Link");
+                name: "PersonInterests");
 
             migrationBuilder.DropTable(
                 name: "Interests");

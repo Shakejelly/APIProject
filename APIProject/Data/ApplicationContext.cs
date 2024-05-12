@@ -10,8 +10,10 @@ namespace APIProject.Data
     {
         public DbSet<Interest> Interests { get; set; }
         public DbSet<Person> Persons { get; set; }
-        public DbSet<Link> Links {get; set; }
+        public DbSet<PersonInterest> PersonInterests {get; set; }
 
-        public ApplicationContext(DbContextOptions<ApplicationContext>options) : base(options) { }
+        public ApplicationContext(DbContextOptions<ApplicationContext>options) : base(options) {}
+
+
     }
 }

@@ -11,8 +11,8 @@ namespace APIProject.Models
         public int PhoneNumber { get; set; }
         public int Age { get; set; }
 
-        public virtual ICollection<Interest> Interests { get; set; }
-        public virtual ICollection<Link> Links { get; set; }
+       
+        public virtual ICollection<PersonInterest> PersonInterests { get; set; }
 
     }
 }
