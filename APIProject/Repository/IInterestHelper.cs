@@ -11,8 +11,8 @@ namespace APIProject.Repository
     }
     public class InterestHelper : IInterestHelper
     {
-        private Data.ApplicationContext _context;
-        public InterestHelper(Data.ApplicationContext context)
+        private ApplicationContext _context;
+        public InterestHelper(ApplicationContext context)
         {
             _context = context;
         }

@@ -30,8 +30,8 @@ namespace APIProject
 
 
 
-
-            app.MapGet("/people/", PersonHandler.ListPeople);
+            app.MapGet("/poeple/{people}", PersonHandler.ViewPeople);
+            app.MapGet("/people", PersonHandler.ListPeople);
             app.MapPost("/people", PersonHandler.AddPeople);
             app.MapPost("/interests", InterestHandler.AddInterest);
 
