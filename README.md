@@ -1,3 +1,4 @@
 Database
 ER Diagram
-![ER Diagram](https://app.diagrams.net/#HShakejelly%2FAPIProject%2Fmaster%2FERDiagramAPIProject.drawio)
+![image](https://github.com/Shakejelly/APIProject/assets/110773165/0294f2b3-9917-40f6-a4d5-f02bb59c4780)
+
