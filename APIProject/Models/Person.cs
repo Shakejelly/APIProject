@@ -13,6 +13,7 @@ namespace APIProject.Models
 
        
         public virtual ICollection<PersonInterest> PersonInterests { get; set; }
+        public virtual ICollection<Link> Links { get; set; }
 
     }
 }

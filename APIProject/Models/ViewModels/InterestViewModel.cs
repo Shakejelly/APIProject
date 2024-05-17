@@ -2,7 +2,7 @@
 {
     public class InterestViewModel
     {
-        public string Titel { get; set; }
+        public string Title { get; set; }
         public string Description { get; set; }
     }
 }
