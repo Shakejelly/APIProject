@@ -1,5 +1,6 @@
 using APIProject.Data;
 using APIProject.Handlers;
+using APIProject.Handlers;
 using APIProject.Models.Dto;
 using APIProject.Models.ViewModels;
 using APIProject.Repository;
@@ -38,9 +39,9 @@ namespace APIProject
             app.MapPost("/addinterest", (InterestViewModel interestViewModel, IInterestHelper interestHelper) => InterestHandler.AddInterest(interestViewModel, interestHelper));
             app.MapGet("/allinterests", (IInterestHelper interestHelper) => InterestHandler.ListInterests(interestHelper));
             app.MapGet("/viewinterest/{id}", (int id, IInterestHelper interestHelper) => InterestHandler.ViewInterest(id, interestHelper));
-            app.MapPost("/addpersoninterest/{id}", (int id, int interestId, IPersonHelper personHelper) => PersonHandler.AddPersonInterest(id, interestId, personHelper));
-            app.MapGet("/links{id}", (int id, IPersonHelper personHelper) => PersonHandler.GetPersonLinks(id, personHelper));
-            app.MapPost("/addlink/{id}", (int id, LinkViewModel linkViewModel, IPersonHelper personHelper) => PersonHandler.AddPersonLink(id, linkViewModel, personHelper));
+            app.MapPost("/addpersoninterest/{id}", (int id, int interestId, string url, IPersonHelper personHelper) => PersonHandler.AddPersonInterest(id, interestId, url, personHelper));
+            app.MapGet("/links{id}", (int id, IPersonHelper personHelper) => PersonHandler.GetPersonInterests(id, personHelper));
+            
 
             if (app.Environment.IsDevelopment())
             {

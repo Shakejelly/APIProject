@@ -11,7 +11,7 @@ namespace APIProject.Data
         public DbSet<Interest> Interests { get; set; }
         public DbSet<Person> Persons { get; set; }
         public DbSet<PersonInterest> PersonInterests {get; set; }
-        public DbSet<Link> Links {  get; set; }  
+      
 
         public ApplicationContext(DbContextOptions<ApplicationContext>options) : base(options) {}
 
@@ -20,17 +20,19 @@ namespace APIProject.Data
             modelBuilder.Entity<PersonInterest>()
                 .HasKey(pi => new { pi.PersonId, pi.InterestId });
 
-            modelBuilder.Entity<Link>()
-                .HasOne(l => l.Person)
-                .WithMany(p => p.Links)
-                .HasForeignKey(l => l.PersonId);
+            modelBuilder.Entity<PersonInterest>()
+                .Property(pi => pi.LinkId)
+                .ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<Link>()
-                .HasOne(l => l.Interest)
-                .WithMany(i => i.Links)
-                .HasForeignKey(l => l.InterestId);
+            modelBuilder.Entity<PersonInterest>()
+                .HasOne(pi => pi.Person)
+                .WithMany(p => p.PersonInterests)
+                .HasForeignKey(pi => pi.PersonId);
 
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<PersonInterest>()
+                .HasOne(pi => pi.Interest)
+                .WithMany(i => i.PersonInterests)
+                .HasForeignKey(pi => pi.InterestId);
         }
     }
 }

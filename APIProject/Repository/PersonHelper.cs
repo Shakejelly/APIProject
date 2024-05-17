@@ -30,41 +30,29 @@ namespace APIProject.Repository
             SaveChangesWithDetailedLogging();
         }
 
-        public void AddPersonInterest(int personId, int interestId)
+        public void AddPersonInterest(int personId, int interestId, string url, IPersonHelper personHelper)
         {
             var personInterest = new PersonInterest
             {
                 PersonId = personId,
-                InterestId = interestId
+                InterestId = interestId,
+                Url = url
             };
 
             _context.PersonInterests.Add(personInterest);
             SaveChangesWithDetailedLogging();
         }
-
-        public void AddPersonLink(int personId, LinkViewModel linkViewModel)
+        public List<InterestDto> GetPersonInterests(int id)
         {
-            var link = new Link
-            {
-                Url = linkViewModel.Url,
-                PersonId = personId,
-                InterestId = linkViewModel.InterestId
-            };
-
-            _context.Links.Add(link);
-            SaveChangesWithDetailedLogging();
-        }
-
-
-        public List<LinkDto> GetPersonLinks(int id)
-        {
-            return _context.Links
-                .Where(l => l.PersonId == id)
-                .Select(l => new LinkDto
+            return _context.PersonInterests
+                .Where(pi => pi.PersonId == id)
+                .Include(pi => pi.Interest)
+                .Select(pi => new InterestDto
                 {
-                    LinkId = l.LinkId,
-                    Url = l.Url,
-                    InterestId = l.InterestId
+                    InterestId = pi.Interest.InterestId,
+                    Title = pi.Interest.Title,
+                    Description = pi.Interest.Description,
+                    
                 })
                 .ToList();
         }
@@ -73,6 +61,7 @@ namespace APIProject.Repository
         {
             return _context.Persons
                 .Include(p => p.PersonInterests)
+
 
                 .Select(p => new PersonDto
                 {
@@ -102,7 +91,8 @@ namespace APIProject.Repository
                     {
                         InterestId = pi.Interest.InterestId,
                         Title = pi.Interest.Title,
-                        Description = pi.Interest.Description
+                        Description = pi.Interest.Description,
+                        
                     }).ToList()
                     
 

@@ -4,6 +4,7 @@
     {
         public string Title {  get; set; }
         public string Description { get; set; }
-        public int InterestId { get; internal set; }
+        public int InterestId { get; set; }
+
     }
 }

@@ -1,5 +1,4 @@
-﻿using APIProject.Models.Dto;
-using APIProject.Models.ViewModels;
+﻿using APIProject.Models.ViewModels;
 using APIProject.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -22,11 +21,11 @@ namespace APIProject.Handlers
 
 
         }
-        public static IResult GetPersonLinks(int id, IPersonHelper personHelper)
+        public static IResult GetPersonInterests(int id, IPersonHelper personHelper)
         {
             try
             {
-                return Results.Json(personHelper.GetPersonLinks(id));
+                return Results.Json(personHelper.GetPersonInterests(id));
             }
             catch (Exception ex)
             {
@@ -59,11 +58,11 @@ namespace APIProject.Handlers
             }
         }
 
-        public static IResult AddPersonInterest(int id, int interestId, IPersonHelper personHelper)
+        public static IResult AddPersonInterest(int id, int interestId, string url, IPersonHelper personHelper)
         {
             try
             {
-                personHelper.AddPersonInterest(id, interestId);
+                personHelper.AddPersonInterest(id, interestId, url, personHelper);
                 return Results.StatusCode((int)HttpStatusCode.Created);
             }
             catch (Exception ex)
@@ -71,20 +70,5 @@ namespace APIProject.Handlers
                 return Results.Problem(ex.Message);
             }
         }
-        public static IResult AddPersonLink(int id, [FromBody] LinkViewModel linkViewModel, IPersonHelper personHelper)
-        {
-            try
-            {
-                personHelper.AddPersonLink(id, linkViewModel);
-                return Results.StatusCode((int)HttpStatusCode.Created);
-            }
-            catch (Exception ex)
-            {
-                return Results.Problem(ex.Message);
-            }
-        }
- 
-
-
     }
 }

@@ -8,9 +8,8 @@ namespace APIProject.Repository
         List<PersonDto> ListPeople();
         PersonDto ViewPeopleInterest(int id);
         void AddPerson(PersonViewModel personViewModel);
+        List<InterestDto> GetPersonInterests(int id);
+        void AddPersonInterest(int personId, int interestId, string url, IPersonHelper personHelper);
         
-        List<LinkDto> GetPersonLinks(int id);
-        void AddPersonInterest(int personId, int interestId);
-        void AddPersonLink(int personId, LinkViewModel linkViewModel);
     }
 }

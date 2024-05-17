@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APIProject.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240517101358_init")]
+    [Migration("20240517175742_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,33 +44,6 @@ namespace APIProject.Migrations
                     b.ToTable("Interests");
                 });
 
-            modelBuilder.Entity("APIProject.Models.Link", b =>
-                {
-                    b.Property<int>("LinkId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LinkId"), 1L, 1);
-
-                    b.Property<int>("InterestId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PersonId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("LinkId");
-
-                    b.HasIndex("InterestId");
-
-                    b.HasIndex("PersonId");
-
-                    b.ToTable("Links");
-                });
-
             modelBuilder.Entity("APIProject.Models.Person", b =>
                 {
                     b.Property<int>("PersonId")
@@ -90,8 +63,9 @@ namespace APIProject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PhoneNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PersonId");
 
@@ -106,30 +80,21 @@ namespace APIProject.Migrations
                     b.Property<int>("InterestId")
                         .HasColumnType("int");
 
+                    b.Property<int>("LinkId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LinkId"), 1L, 1);
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("PersonId", "InterestId");
 
                     b.HasIndex("InterestId");
 
                     b.ToTable("PersonInterests");
-                });
-
-            modelBuilder.Entity("APIProject.Models.Link", b =>
-                {
-                    b.HasOne("APIProject.Models.Interest", "Interest")
-                        .WithMany("Links")
-                        .HasForeignKey("InterestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("APIProject.Models.Person", "Person")
-                        .WithMany("Links")
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Interest");
-
-                    b.Navigation("Person");
                 });
 
             modelBuilder.Entity("APIProject.Models.PersonInterest", b =>
@@ -153,15 +118,11 @@ namespace APIProject.Migrations
 
             modelBuilder.Entity("APIProject.Models.Interest", b =>
                 {
-                    b.Navigation("Links");
-
                     b.Navigation("PersonInterests");
                 });
 
             modelBuilder.Entity("APIProject.Models.Person", b =>
                 {
-                    b.Navigation("Links");
-
                     b.Navigation("PersonInterests");
                 });
 #pragma warning restore 612, 618
