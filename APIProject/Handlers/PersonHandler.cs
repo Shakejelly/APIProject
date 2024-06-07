@@ -1,4 +1,5 @@
-﻿using APIProject.Models.ViewModels;
+﻿using APIProject.Models.Dto;
+using APIProject.Models.ViewModels;
 using APIProject.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -33,23 +34,11 @@ namespace APIProject.Handlers
             }
         }
 
-        public static IResult ViewPeopleInterest(int id, IPersonHelper personHelper)
+        public static IResult AddPerson([FromBody] PersonDto personDto, IPersonHelper personHelper)
         {
             try
             {
-                return Results.Json(personHelper.ViewPeopleInterest(id));
-            }
-            catch (Exception ex)
-            {
-                return Results.Problem(ex.Message);
-            }
-
-        }
-        public static IResult AddPerson([FromBody] PersonViewModel personViewModel, IPersonHelper personHelper)
-        {
-            try
-            {
-                personHelper.AddPerson(personViewModel);
+                personHelper.AddPerson(personDto);
                 return Results.StatusCode((int)HttpStatusCode.Created);
             }
             catch (Exception ex)
@@ -58,16 +47,29 @@ namespace APIProject.Handlers
             }
         }
 
-        public static IResult AddPersonInterest(int id, int interestId, string url, IPersonHelper personHelper)
+        public static IResult AddPersonInterest(int id, int interestId, IPersonHelper personHelper)
         {
             try
             {
-                personHelper.AddPersonInterest(id, interestId, url, personHelper);
+                personHelper.AddPersonInterest(id, interestId, personHelper);
                 return Results.StatusCode((int)HttpStatusCode.Created);
             }
             catch (Exception ex)
             {
                 return Results.Problem(ex.Message);
+            }
+        }
+        public static IResult LinksConnectedToPersons(int personId , IPersonHelper personHelper)
+        {
+            try
+            {
+                personHelper.LinksConnectedToPersons(personId);
+                return Results.StatusCode((int)HttpStatusCode.Created);
+            }
+            catch (Exception ex)
+            {
+
+                return Results.Problem(ex.Message); 
             }
         }
     }

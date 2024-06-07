@@ -3,35 +3,61 @@ using APIProject.Models.ViewModels;
 using APIProject.Models;
 using Microsoft.EntityFrameworkCore;
 using APIProject.Models.Dto;
+using System.Linq;
 
 namespace APIProject.Repository
 {
     public class InterestHelper : IInterestHelper
     {
-    private readonly ApplicationContext _context;
+        private readonly ApplicationContext _context;
 
-    public InterestHelper(ApplicationContext context)
-    {
-        _context = context;
-    }
-        public void AddInterest(InterestViewModel interestViewModel)
+        public InterestHelper(ApplicationContext context)
+        {
+            _context = context;
+        }
+        public void AddInterest(InterestDto interestDto)
         {
             var interest = new Interest
             {
-                Title = interestViewModel.Title,
-                Description = interestViewModel.Description,
-                
+                Title = interestDto.Title,
+                Description = interestDto.Description,
+
             };
 
             _context.Interests.Add(interest);
             _context.SaveChanges();
         }
 
-        public List<InterestDto> ListInterests()
+        public void AddLinkToInterest(int personId, int interestId, LinkDto linkDto)
+        {
+            // Making sure that if the it makes a new personInterest whenever you put in a link from a person to a interest. But if the person already is linked to the interest no new links will happen.
+            var existingPersonInterest = _context.PersonInterests
+                .FirstOrDefault(pi => pi.PersonId == personId && pi.InterestId == interestId);
+                
+            if (existingPersonInterest == null) { 
+            var personInterest = new PersonInterest
+            {
+                PersonId = personId,
+                InterestId = interestId,
+
+            };
+            _context.PersonInterests.Add(personInterest);
+            }
+
+            var link = new Link
+            {
+                InterestId = interestId,
+                Url = linkDto.Url,
+            };
+            _context.Links.Add(link);
+            _context.SaveChanges();
+        }
+
+        public List<InterestViewModel> ListInterests()
         {
             return _context.Interests
                 .Include(p => p.PersonInterests)
-                .Select(p => new InterestDto
+                .Select(p => new InterestViewModel
                 {
                     InterestId = p.InterestId,
                     Title = p.Title,
@@ -41,22 +67,23 @@ namespace APIProject.Repository
                 .ToList();
         }
 
-        public InterestDto ViewInterest(int id)
+        public List<LinkViewModel> ListLinks(int id)
         {
-            var interest = _context.Interests
-                .Include(i => i.PersonInterests)
-                .Where(i => i.InterestId == id)
-                .Select(i => new InterestDto
-                {
-                    InterestId = i.InterestId,
-                    Title = i.Title,
-                    Description = i.Description
-                })
-                .FirstOrDefault();
+            return _context.Links
+                .Include(li => li.Interest)
+                 .Where(li => li.InterestId == id)
+                 .Select(li => new LinkViewModel
+                 {
+                     InterestId = li.InterestId,
+                     Title = li.Interest.Title,
+                     Url = li.Url,
 
-            return interest;
+
+                 })
+            .ToList();
+
         }
-    }
 
+    }
     
 }

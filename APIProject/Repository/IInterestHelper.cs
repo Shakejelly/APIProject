@@ -4,8 +4,10 @@ namespace APIProject.Repository
 {
     public interface IInterestHelper
     {
-        void AddInterest(InterestViewModel interestViewModel);
-        List<InterestDto> ListInterests();
-        InterestDto ViewInterest(int id);
+        void AddInterest(InterestDto interestDto);
+        List<InterestViewModel> ListInterests();
+        void AddLinkToInterest(int personId, int interestId, LinkDto linkDto);
+        List<LinkViewModel> ListLinks(int id);
+
     }
 }

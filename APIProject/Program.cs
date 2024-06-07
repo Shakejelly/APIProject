@@ -1,6 +1,5 @@
 using APIProject.Data;
 using APIProject.Handlers;
-using APIProject.Handlers;
 using APIProject.Models.Dto;
 using APIProject.Models.ViewModels;
 using APIProject.Repository;
@@ -34,13 +33,15 @@ namespace APIProject
 
 
             app.MapGet("/allpeople", (IPersonHelper personHelper) => PersonHandler.ListPeople(personHelper));
-            app.MapGet("/viewpeopleinterest/{id}", (int id, IPersonHelper personHelper) => PersonHandler.ViewPeopleInterest(id, personHelper));
-            app.MapPost("/addpeople", (PersonViewModel personViewModel, IPersonHelper personHelper) => PersonHandler.AddPerson(personViewModel, personHelper));
-            app.MapPost("/addinterest", (InterestViewModel interestViewModel, IInterestHelper interestHelper) => InterestHandler.AddInterest(interestViewModel, interestHelper));
+            app.MapGet("/alllinksfrominterest", (int id, IInterestHelper interestHelper) => InterestHandler.ListLinks(id, interestHelper));
             app.MapGet("/allinterests", (IInterestHelper interestHelper) => InterestHandler.ListInterests(interestHelper));
-            app.MapGet("/viewinterest/{id}", (int id, IInterestHelper interestHelper) => InterestHandler.ViewInterest(id, interestHelper));
-            app.MapPost("/addpersoninterest/{id}", (int id, int interestId, string url, IPersonHelper personHelper) => PersonHandler.AddPersonInterest(id, interestId, url, personHelper));
-            app.MapGet("/links{id}", (int id, IPersonHelper personHelper) => PersonHandler.GetPersonInterests(id, personHelper));
+            app.MapGet("/personinterests", (int id, IPersonHelper personHelper) => PersonHandler.GetPersonInterests(id, personHelper));
+            app.MapGet("/listlinksconnectedtopersons")
+
+            app.MapPost("/addpeople", (PersonDto personDto, IPersonHelper personHelper) => PersonHandler.AddPerson(personDto, personHelper));
+            app.MapPost("/addinterest", (InterestDto interestDto, IInterestHelper interestHelper) => InterestHandler.AddInterest(interestDto, interestHelper));
+            app.MapPost("/addpersoninterest", (int id, int interestId, IPersonHelper personHelper) => PersonHandler.AddPersonInterest(id, interestId, personHelper));
+            app.MapPost("/AddLinkToInterest", (int personId, int interestId, LinkDto linkDto, IInterestHelper interestHelper) => InterestHandler.AddLinkToInterest(personId, interestId, linkDto, interestHelper));
             
 
             if (app.Environment.IsDevelopment())

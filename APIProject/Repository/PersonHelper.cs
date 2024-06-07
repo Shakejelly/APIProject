@@ -16,43 +16,57 @@ namespace APIProject.Repository
             _context = context;
         }
 
-        public void AddPerson(PersonViewModel personViewModel)
+        public void AddPerson(PersonDto personDto)
         {
             var person = new Person
             {
-                FirstName = personViewModel.FirstName,
-                LastName = personViewModel.LastName,
-                PhoneNumber = personViewModel.PhoneNumber,
-                Age = personViewModel.Age
+                FirstName = personDto.FirstName,
+                LastName = personDto.LastName,
+                PhoneNumber = personDto.PhoneNumber,
+                Age = personDto.Age
             };
 
             _context.Persons.Add(person);
             SaveChangesWithDetailedLogging();
         }
 
-        public void AddPersonInterest(int personId, int interestId, string url, IPersonHelper personHelper)
+        public void AddPersonInterest(int personId, int interestId, IPersonHelper personHelper)
         {
             var personInterest = new PersonInterest
             {
                 PersonId = personId,
                 InterestId = interestId,
-                Url = url
+
             };
 
             _context.PersonInterests.Add(personInterest);
             SaveChangesWithDetailedLogging();
         }
-        public List<InterestDto> GetPersonInterests(int id)
+        public List<PersonInterestViewModel> GetPersonInterests(int id)
         {
             return _context.PersonInterests
                 .Where(pi => pi.PersonId == id)
                 .Include(pi => pi.Interest)
-                .Select(pi => new InterestDto
+                .Select(pi => new PersonInterestViewModel
                 {
-                    InterestId = pi.Interest.InterestId,
+                    Name = pi.Person.FirstName + " " + pi.Person.LastName,
                     Title = pi.Interest.Title,
                     Description = pi.Interest.Description,
-                    
+
+                })
+                .ToList();
+        }
+
+        public List<PersonLinksViewModel> LinksConnectedToPersons(int id, IPersonHelper personHelper)
+        {
+            return _context.PersonInterests
+                .Where(pi => pi.PersonId == id)
+                .Include(pi => pi.Interest)
+                .Include(pi => pi.Interest.Links)
+                .SelectMany(pi => pi.Interest.Links, (pi, l) => new PersonLinksViewModel
+                {
+                    PersonId = pi.PersonId,
+                    Url = l.Url,
                 })
                 .ToList();
         }
@@ -75,32 +89,7 @@ namespace APIProject.Repository
                 .ToList();
         }
 
-        public PersonDto ViewPeopleInterest(int id)
-        {
-            var person = _context.Persons
-                .Include(p => p.PersonInterests)
-                .ThenInclude(p => p.Interest)
-                .Where(p => p.PersonId == id)
-                .Select(p => new PersonDto
-                {
-                    PersonId = p.PersonId,
-                    FirstName = p.FirstName,
-                    LastName = p.LastName,
-                    PhoneNumber = p.PhoneNumber,
-                    Interests = p.PersonInterests.Select(pi => new InterestDto
-                    {
-                        InterestId = pi.Interest.InterestId,
-                        Title = pi.Interest.Title,
-                        Description = pi.Interest.Description,
-                        
-                    }).ToList()
-                    
-
-                })
-                .FirstOrDefault();
-
-            return person;
-        }
+       
         private void SaveChangesWithDetailedLogging()
         {
             try

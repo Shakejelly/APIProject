@@ -11,6 +11,7 @@ namespace APIProject.Data
         public DbSet<Interest> Interests { get; set; }
         public DbSet<Person> Persons { get; set; }
         public DbSet<PersonInterest> PersonInterests {get; set; }
+        public DbSet<Link> Links { get; set; }
       
 
         public ApplicationContext(DbContextOptions<ApplicationContext>options) : base(options) {}
@@ -20,9 +21,6 @@ namespace APIProject.Data
             modelBuilder.Entity<PersonInterest>()
                 .HasKey(pi => new { pi.PersonId, pi.InterestId });
 
-            modelBuilder.Entity<PersonInterest>()
-                .Property(pi => pi.LinkId)
-                .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<PersonInterest>()
                 .HasOne(pi => pi.Person)
