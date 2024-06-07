@@ -59,12 +59,11 @@ namespace APIProject.Handlers
                 return Results.Problem(ex.Message);
             }
         }
-        public static IResult LinksConnectedToPersons(int personId , IPersonHelper personHelper)
+        public static IResult LinksConnectedToPersons(int personId, IPersonHelper personHelper)
         {
             try
             {
-                personHelper.LinksConnectedToPersons(personId);
-                return Results.StatusCode((int)HttpStatusCode.Created);
+                return Results.Json(personHelper.LinksConnectedToPersons(personId, personHelper));
             }
             catch (Exception ex)
             {

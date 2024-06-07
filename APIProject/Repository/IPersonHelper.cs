@@ -10,7 +10,7 @@ namespace APIProject.Repository
         void AddPerson(PersonDto personDto);
         List<PersonInterestViewModel> GetPersonInterests(int id);
         void AddPersonInterest(int personId, int interestId, IPersonHelper personHelper);
-        List<PersonLinksViewModel>LinksConnectedToPersons(int id, IPersonHelper personHelper);
+        List<PersonLinksViewModel>LinksConnectedToPersons(int personId, IPersonHelper personHelper);
 
     }
 }

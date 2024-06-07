@@ -36,7 +36,7 @@ namespace APIProject
             app.MapGet("/alllinksfrominterest", (int id, IInterestHelper interestHelper) => InterestHandler.ListLinks(id, interestHelper));
             app.MapGet("/allinterests", (IInterestHelper interestHelper) => InterestHandler.ListInterests(interestHelper));
             app.MapGet("/personinterests", (int id, IPersonHelper personHelper) => PersonHandler.GetPersonInterests(id, personHelper));
-            app.MapGet("/listlinksconnectedtopersons")
+            app.MapGet("/listlinksconnectedtopersons", (int personId, IPersonHelper personHelper) => PersonHandler.LinksConnectedToPersons(personId, personHelper));
 
             app.MapPost("/addpeople", (PersonDto personDto, IPersonHelper personHelper) => PersonHandler.AddPerson(personDto, personHelper));
             app.MapPost("/addinterest", (InterestDto interestDto, IInterestHelper interestHelper) => InterestHandler.AddInterest(interestDto, interestHelper));

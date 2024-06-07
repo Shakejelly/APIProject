@@ -57,19 +57,25 @@ namespace APIProject.Repository
                 .ToList();
         }
 
-        public List<PersonLinksViewModel> LinksConnectedToPersons(int id, IPersonHelper personHelper)
+        public List<PersonLinksViewModel> LinksConnectedToPersons(int personId, IPersonHelper personHelper)
         {
-            return _context.PersonInterests
-                .Where(pi => pi.PersonId == id)
+            var personLinks = _context.PersonInterests
+                .Where(pi => pi.PersonId == personId)
                 .Include(pi => pi.Interest)
-                .Include(pi => pi.Interest.Links)
-                .SelectMany(pi => pi.Interest.Links, (pi, l) => new PersonLinksViewModel
+                .ThenInclude(i => i.Links)
+                .Select(pi => new PersonLinksViewModel
                 {
                     PersonId = pi.PersonId,
-                    Url = l.Url,
+                    Urls = pi.Interest.Links
+                        .Where(link => !string.IsNullOrEmpty(link.Url))
+                        .Select(link => link.Url)
+                        .ToList()
                 })
                 .ToList();
+
+            return personLinks;
         }
+    
 
         public List<PersonDto> ListPeople()
         {
@@ -79,7 +85,6 @@ namespace APIProject.Repository
 
                 .Select(p => new PersonDto
                 {
-                    PersonId = p.PersonId,
                     FirstName = p.FirstName,
                     LastName = p.LastName,
                     PhoneNumber = p.PhoneNumber,
